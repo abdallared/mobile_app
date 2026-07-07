@@ -1,0 +1,16 @@
+- `[/]` Install Flutter/Android CLI
+- `[/]` Create Flutter project structure
+- `[ ]` Implement design system (app_theme.dart)
+- `[ ]` Build reusable widgets (glass_card, bottom_nav, progress_ring, etc.)
+- `[ ]` Implement Screen 1: Splash Screen
+- `[ ]` Implement Screen 2: Onboarding Flow
+- `[ ]` Implement Screen 3: Login & Sign Up
+- `[ ]` Implement Screen 4: Home Dashboard
+- `[ ]` Implement Screen 5: Add Habit
+- `[ ]` Implement Screen 6: Habit Details & Calendar
+- `[ ]` Implement Screen 7: Statistics & Achievements
+- `[ ]` Implement Screen 8: Profile & Settings
+- `[ ]` Implement Screen 9: Notifications, Empty & Success
+- `[ ]` Wire up navigation (main.dart routes)
+- `[ ]` Add pubspec.yaml dependencies
+- `[ ]` Build and run locally
