@@ -198,7 +198,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                   const SizedBox(height: 4),
                   // Subtitle
-                  Text(
+                  const Text(
                     'LUMINOUS ROUTINE',
                     style: TextStyle(
                       fontSize: 14,
@@ -217,7 +217,8 @@ class _SplashScreenState extends State<SplashScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(3, (index) {
                           final delay = index * 0.2;
-                          final value = ((_pulseController.value + delay) % 1.0);
+                          final value =
+                              ((_pulseController.value + delay) % 1.0);
                           final scale = 0.85 + 0.15 * sin(value * pi);
                           final alpha = 0.3 + 0.7 * sin(value * pi);
                           return Container(
@@ -230,8 +231,8 @@ class _SplashScreenState extends State<SplashScreen>
                               boxShadow: alpha > 0.6
                                   ? [
                                       BoxShadow(
-                                        color: Colors.white
-                                            .withValues(alpha: 0.4),
+                                        color:
+                                            Colors.white.withValues(alpha: 0.4),
                                         blurRadius: 15,
                                       ),
                                     ]

@@ -58,21 +58,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: Stack(
         children: [
           // Ambient background blobs
-          _AmbientBlob(
+          const _AmbientBlob(
             top: -0.1,
             left: -0.1,
             size: 0.5,
             color: HabitFlowColors.primaryFixed,
             delay: 0,
           ),
-          _AmbientBlob(
+          const _AmbientBlob(
             top: 0.2,
             right: -0.1,
             size: 0.4,
             color: HabitFlowColors.tertiaryFixed,
             delay: 2,
           ),
-          _AmbientBlob(
+          const _AmbientBlob(
             bottom: -0.1,
             left: 0.1,
             size: 0.6,
@@ -97,7 +97,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       height: 256,
                       margin: const EdgeInsets.only(bottom: 32),
                       decoration: BoxDecoration(
-                        color: HabitFlowColors.primaryFixed.withValues(alpha: 0.3),
+                        color:
+                            HabitFlowColors.primaryFixed.withValues(alpha: 0.3),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -118,7 +119,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: HabitFlowColors.primary.withValues(alpha: 0.05),
+                            color:
+                                HabitFlowColors.primary.withValues(alpha: 0.05),
                             blurRadius: 20,
                           ),
                         ],
@@ -237,8 +239,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               backgroundColor: HabitFlowColors.primary,
                               foregroundColor: Colors.white,
                               elevation: 4,
-                              shadowColor:
-                                  HabitFlowColors.primary.withValues(alpha: 0.25),
+                              shadowColor: HabitFlowColors.primary
+                                  .withValues(alpha: 0.25),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(9999),
                               ),

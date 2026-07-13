@@ -135,10 +135,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
                       child: _activeTab == 0
-                          ? _AlertsView(key: const ValueKey(0))
+                          ? const _AlertsView(key: ValueKey(0))
                           : _activeTab == 1
-                              ? _EmptyView(key: const ValueKey(1))
-                              : _SuccessView(key: const ValueKey(2)),
+                              ? const _EmptyView(key: ValueKey(1))
+                              : const _SuccessView(key: ValueKey(2)),
                     ),
                   ),
                 ],
@@ -234,7 +234,8 @@ class _AlertsView extends StatelessWidget {
           const SizedBox(height: 12),
           _NotifItem(
             icon: Icons.menu_book,
-            iconBgColor: HabitFlowColors.tertiaryContainer.withValues(alpha: 0.1),
+            iconBgColor:
+                HabitFlowColors.tertiaryContainer.withValues(alpha: 0.1),
             iconColor: HabitFlowColors.tertiaryContainer,
             title: 'Read 10 Pages',
             subtitle: '8:30 PM • Mon, Wed, Fri',
@@ -243,7 +244,8 @@ class _AlertsView extends StatelessWidget {
           const SizedBox(height: 12),
           _NotifItem(
             icon: Icons.self_improvement,
-            iconBgColor: HabitFlowColors.secondaryContainer.withValues(alpha: 0.1),
+            iconBgColor:
+                HabitFlowColors.secondaryContainer.withValues(alpha: 0.1),
             iconColor: HabitFlowColors.secondary,
             title: 'Mindful Stretch',
             subtitle: '12:00 PM • Daily',
@@ -299,7 +301,8 @@ class _NotifItemState extends State<_NotifItem> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               color: widget.iconBgColor,
-              border: Border.all(color: widget.iconColor.withValues(alpha: 0.2)),
+              border:
+                  Border.all(color: widget.iconColor.withValues(alpha: 0.2)),
             ),
             child: Icon(widget.icon, color: widget.iconColor),
           ),
@@ -428,8 +431,7 @@ class _EmptyView extends StatelessWidget {
                   color: HabitFlowColors.primary,
                   borderRadius: BorderRadius.circular(9999),
                   border: Border(
-                    top: BorderSide(
-                        color: Colors.white.withValues(alpha: 0.3)),
+                    top: BorderSide(color: Colors.white.withValues(alpha: 0.3)),
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -439,9 +441,9 @@ class _EmptyView extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     Icon(Icons.add, color: Colors.white),
                     SizedBox(width: 8),
                     Text(
@@ -563,8 +565,7 @@ class _SuccessViewState extends State<_SuccessView>
                                 shape: BoxShape.circle,
                                 color: Colors.white.withValues(alpha: 0.4),
                                 border: Border.all(
-                                    color:
-                                        Colors.white.withValues(alpha: 0.6)),
+                                    color: Colors.white.withValues(alpha: 0.6)),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withValues(alpha: 0.1),

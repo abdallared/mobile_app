@@ -107,7 +107,7 @@ class HabitProvider extends ChangeNotifier {
     return trend;
   }
 
-  double get categoryFocusRate(String category) {
+  double categoryFocusRate(String category) {
     int totalCompleted = 0;
     int totalCategoryCompleted = 0;
     

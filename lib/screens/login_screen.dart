@@ -17,21 +17,22 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLogin = !_isLogin);
   }
 
+  void _showError(BuildContext context, String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        backgroundColor: HabitFlowColors.error,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: HabitFlowColors.surface,
-          image: DecorationImage(
-            image: const AssetImage(''),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              HabitFlowColors.surface,
-              BlendMode.srcOver,
-            ),
-            onError: (_, __) {},
-          ),
         ),
         child: Stack(
           children: [
@@ -127,10 +128,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           ? _LoginView(
                               key: const ValueKey('login'),
                               onToggle: _toggleView,
+                              onError: (msg) => _showError(context, msg),
                             )
                           : _SignUpView(
                               key: const ValueKey('signup'),
                               onToggle: _toggleView,
+                              onError: (msg) => _showError(context, msg),
                             ),
                     ),
                   ],
@@ -144,10 +147,38 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-class _LoginView extends StatelessWidget {
+class _LoginView extends StatefulWidget {
   final VoidCallback onToggle;
+  final void Function(String) onError;
 
-  const _LoginView({super.key, required this.onToggle});
+  const _LoginView({super.key, required this.onToggle, required this.onError});
+
+  @override
+  State<_LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<_LoginView> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    if (_emailController.text.trim().isEmpty) {
+      widget.onError('Please enter your email.');
+      return;
+    }
+    if (_passwordController.text.isEmpty) {
+      widget.onError('Please enter your password.');
+      return;
+    }
+    Navigator.pushReplacementNamed(context, '/main');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -195,6 +226,7 @@ class _LoginView extends StatelessWidget {
                 icon: Icons.email_outlined,
                 hint: 'name@example.com',
                 keyboardType: TextInputType.emailAddress,
+                controller: _emailController,
               ),
               const SizedBox(height: 16),
               _GlassInput(
@@ -202,6 +234,7 @@ class _LoginView extends StatelessWidget {
                 icon: Icons.lock_outlined,
                 hint: '••••••••',
                 obscure: true,
+                controller: _passwordController,
                 trailing: Text(
                   'Forgot Password?',
                   style: TextStyle(
@@ -216,8 +249,7 @@ class _LoginView extends StatelessWidget {
                 width: double.infinity,
                 child: GradientButton(
                   label: 'Login',
-                  onPressed: () =>
-                      Navigator.pushReplacementNamed(context, '/main'),
+                  onPressed: _submit,
                 ),
               ),
               const SizedBox(height: 20),
@@ -269,7 +301,7 @@ class _LoginView extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: onToggle,
+                    onTap: widget.onToggle,
                     child: const Text(
                       'Sign up',
                       style: TextStyle(
@@ -289,10 +321,50 @@ class _LoginView extends StatelessWidget {
   }
 }
 
-class _SignUpView extends StatelessWidget {
+class _SignUpView extends StatefulWidget {
   final VoidCallback onToggle;
+  final void Function(String) onError;
 
-  const _SignUpView({super.key, required this.onToggle});
+  const _SignUpView({super.key, required this.onToggle, required this.onError});
+
+  @override
+  State<_SignUpView> createState() => _SignUpViewState();
+}
+
+class _SignUpViewState extends State<_SignUpView> {
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmController.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    if (_nameController.text.trim().isEmpty) {
+      widget.onError('Please enter your name.');
+      return;
+    }
+    if (_emailController.text.trim().isEmpty) {
+      widget.onError('Please enter your email.');
+      return;
+    }
+    if (_passwordController.text.isEmpty) {
+      widget.onError('Please create a password.');
+      return;
+    }
+    if (_passwordController.text != _confirmController.text) {
+      widget.onError('Passwords do not match.');
+      return;
+    }
+    Navigator.pushReplacementNamed(context, '/main');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -339,6 +411,7 @@ class _SignUpView extends StatelessWidget {
                 label: 'Full Name',
                 icon: Icons.person_outline,
                 hint: 'Alex Rivers',
+                controller: _nameController,
               ),
               const SizedBox(height: 12),
               _GlassInput(
@@ -346,6 +419,7 @@ class _SignUpView extends StatelessWidget {
                 icon: Icons.email_outlined,
                 hint: 'name@example.com',
                 keyboardType: TextInputType.emailAddress,
+                controller: _emailController,
               ),
               const SizedBox(height: 12),
               _GlassInput(
@@ -353,6 +427,7 @@ class _SignUpView extends StatelessWidget {
                 icon: Icons.lock_outlined,
                 hint: 'Create a password',
                 obscure: true,
+                controller: _passwordController,
               ),
               const SizedBox(height: 12),
               _GlassInput(
@@ -360,14 +435,14 @@ class _SignUpView extends StatelessWidget {
                 icon: Icons.verified_user_outlined,
                 hint: 'Repeat password',
                 obscure: true,
+                controller: _confirmController,
               ),
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
                 child: GradientButton(
                   label: 'Create Account',
-                  onPressed: () =>
-                      Navigator.pushReplacementNamed(context, '/main'),
+                  onPressed: _submit,
                 ),
               ),
               const SizedBox(height: 12),
@@ -382,7 +457,7 @@ class _SignUpView extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: onToggle,
+                    onTap: widget.onToggle,
                     child: const Text(
                       'Log in',
                       style: TextStyle(
@@ -409,6 +484,7 @@ class _GlassInput extends StatelessWidget {
   final bool obscure;
   final TextInputType? keyboardType;
   final Widget? trailing;
+  final TextEditingController? controller;
 
   const _GlassInput({
     required this.label,
@@ -417,6 +493,7 @@ class _GlassInput extends StatelessWidget {
     this.obscure = false,
     this.keyboardType,
     this.trailing,
+    this.controller,
   });
 
   @override
@@ -457,6 +534,7 @@ class _GlassInput extends StatelessWidget {
             ],
           ),
           child: TextField(
+            controller: controller,
             obscureText: obscure,
             keyboardType: keyboardType,
             style: const TextStyle(

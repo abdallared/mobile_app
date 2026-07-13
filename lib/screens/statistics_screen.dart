@@ -14,7 +14,7 @@ class StatisticsScreen extends StatelessWidget {
     final weeklyCompletionRate = provider.weeklyCompletionRate;
     final weeklyTrend = provider.weeklyTrend;
     final globalStreak = provider.globalStreak;
-    
+
     // Find best habit
     final activeHabits = provider.activeHabits;
     var bestHabit = activeHabits.isNotEmpty ? activeHabits.first : null;
@@ -32,7 +32,7 @@ class StatisticsScreen extends StatelessWidget {
     };
     final List<(Color, double)> donutSegments = [];
     final List<Widget> legendItems = [];
-    
+
     for (var cat in categoryColors.keys) {
       double rate = provider.categoryFocusRate(cat);
       if (rate > 0) {
@@ -43,7 +43,8 @@ class StatisticsScreen extends StatelessWidget {
     // Fallback if empty
     if (donutSegments.isEmpty) {
       donutSegments.add((HabitFlowColors.surfaceVariant, 1.0));
-      legendItems.add(const _LegendItem(HabitFlowColors.surfaceVariant, 'No Data'));
+      legendItems
+          .add(const _LegendItem(HabitFlowColors.surfaceVariant, 'No Data'));
     }
 
     return Scaffold(
@@ -254,7 +255,7 @@ class StatisticsScreen extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(Icons.local_fire_department,
+                                  const Icon(Icons.local_fire_department,
                                       color: HabitFlowColors.tertiaryFixedDim),
                                   const SizedBox(height: 4),
                                   Text(
@@ -284,7 +285,8 @@ class StatisticsScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Icon(bestHabit?.icon ?? Icons.star,
-                                      color: bestHabit?.color ?? HabitFlowColors.secondary),
+                                      color: bestHabit?.color ??
+                                          HabitFlowColors.secondary),
                                   const SizedBox(height: 4),
                                   Text(
                                     bestHabit?.title ?? 'None',
@@ -336,7 +338,7 @@ class StatisticsScreen extends StatelessWidget {
                         subtitle: '7 Day Streak',
                         unlocked: globalStreak >= 7,
                       ),
-                      _TrophyCard(
+                      const _TrophyCard(
                         icon: Icons.check_circle,
                         title: 'Centurion',
                         subtitle: '100 Habits',
@@ -385,7 +387,8 @@ class _StatBar extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: HabitFlowColors.surfaceVariant.withValues(alpha: 0.5),
+                      color:
+                          HabitFlowColors.surfaceVariant.withValues(alpha: 0.5),
                       borderRadius:
                           const BorderRadius.vertical(top: Radius.circular(4)),
                     ),

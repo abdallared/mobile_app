@@ -24,7 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
     int completedToday = provider.activeHabits.where((h) => h.isCompletedOn(today)).length;
     int totalHabits = provider.activeHabits.length;
     double progress = totalHabits == 0 ? 0 : completedToday / totalHabits;
-    
+
+    final hour = DateTime.now().hour;
+    final greeting = hour < 12 ? 'Good Morning,' : hour < 17 ? 'Good Afternoon,' : 'Good Evening,';
     return Scaffold(
       backgroundColor: HabitFlowColors.surface,
       extendBody: true,
@@ -73,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Good Morning,',
+                          greeting,
                           style: TextStyle(
                             fontSize: 16,
                             color: HabitFlowColors.onSurfaceVariant,
@@ -173,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () => Navigator.pushNamed(context, '/notifications'),
                           child: const Text(
                             'See all',
                             style: TextStyle(
@@ -199,7 +201,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             iconColor: habit.color,
                             title: habit.title,
                             subtitle: habit.category,
-                            progress: 0.0,
+                            progress: totalHabits == 0
+                                ? 0.0
+                                : habit.completedDates.length /
+                                    (habit.completedDates.length + 1).clamp(1, 30).toDouble(),
                             checked: habit.isCompletedOn(today),
                             onChecked: (v) {
                               provider.toggleHabitCompletion(habit.id, today);
@@ -267,7 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () => Navigator.pushNamed(context, '/notifications'),
                     child: Container(
                       width: 40,
                       height: 40,

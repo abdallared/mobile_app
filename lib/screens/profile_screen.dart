@@ -199,6 +199,14 @@ class ProfileScreen extends StatelessWidget {
                           child: GradientButton(
                             label: 'Share Profile',
                             icon: Icons.share,
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Profile link copied to clipboard!'),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -366,8 +374,8 @@ class ProfileScreen extends StatelessWidget {
                   const SizedBox(height: 24),
                   // Log out
                   TextButton.icon(
-                    onPressed: () => Navigator.pushReplacementNamed(
-                        context, '/login'),
+                    onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                        context, '/login', (route) => false),
                     icon: const Icon(Icons.logout,
                         color: HabitFlowColors.error, size: 20),
                     label: const Text(

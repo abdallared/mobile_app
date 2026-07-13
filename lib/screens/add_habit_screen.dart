@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/gradient_button.dart';
+import 'package:provider/provider.dart';
+import '../providers/habit_provider.dart';
+import '../models/habit.dart';
 
 class AddHabitScreen extends StatefulWidget {
   const AddHabitScreen({super.key});
@@ -15,6 +18,8 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   int _selectedCategory = 0;
   int _selectedColor = 0;
   int _selectedFrequency = 0;
+  TimeOfDay _reminderTime = const TimeOfDay(hour: 8, minute: 0);
+  final _nameController = TextEditingController();
 
   final List<_Category> _categories = [
     _Category(Icons.favorite, 'Health'),
@@ -34,6 +39,37 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   ];
 
   final List<String> _frequencies = ['Daily', 'Weekly', 'Custom'];
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  void _saveHabit() {
+    final name = _nameController.text.trim();
+    if (name.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a habit name.'),
+          backgroundColor: HabitFlowColors.error,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+    final cat = _categories[_selectedCategory];
+    final color = _colors[_selectedColor];
+    final habit = Habit(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      title: name,
+      category: cat.label,
+      color: color,
+      icon: cat.icon,
+    );
+    context.read<HabitProvider>().addHabit(habit);
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -157,6 +193,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                                           Colors.white.withValues(alpha: 0.6)),
                                 ),
                                 child: TextField(
+                                  controller: _nameController,
                                   style: const TextStyle(
                                     fontSize: 18,
                                     color: HabitFlowColors.onSurface,
@@ -343,30 +380,48 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                               // Reminder Time
                               _SectionLabel('Reminder Time'),
                               const SizedBox(height: 8),
-                              Container(
-                                height: 48,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.5),
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(
-                                      color:
-                                          Colors.white.withValues(alpha: 0.6)),
-                                ),
-                                child: Row(
-                                  children: [
-                                    const SizedBox(width: 16),
-                                    const Icon(
-                                        Icons.notifications_active_outlined,
-                                        color: HabitFlowColors.outline),
-                                    const SizedBox(width: 12),
-                                    const Text(
-                                      '08:00 AM',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: HabitFlowColors.onSurface,
+                              GestureDetector(
+                                onTap: () async {
+                                  final picked = await showTimePicker(
+                                    context: context,
+                                    initialTime: _reminderTime,
+                                  );
+                                  if (picked != null) {
+                                    setState(() => _reminderTime = picked);
+                                  }
+                                },
+                                child: Container(
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.5),
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(
+                                        color:
+                                            Colors.white.withValues(alpha: 0.6)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(width: 16),
+                                      const Icon(
+                                          Icons.notifications_active_outlined,
+                                          color: HabitFlowColors.outline),
+                                      const SizedBox(width: 12),
+                                      Text(
+                                        _reminderTime.format(context),
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          color: HabitFlowColors.onSurface,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      const Spacer(),
+                                      const Padding(
+                                        padding: EdgeInsets.only(right: 16),
+                                        child: Icon(Icons.edit_outlined,
+                                            size: 18,
+                                            color: HabitFlowColors.onSurfaceVariant),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
@@ -388,7 +443,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                           child: GradientButton(
                             label: 'Save Habit',
                             icon: Icons.arrow_forward,
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: _saveHabit,
                           ),
                         ),
                       ),
